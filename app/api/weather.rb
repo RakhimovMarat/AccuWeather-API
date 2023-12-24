@@ -94,14 +94,16 @@ module Weather
       end
 
       desc 'Температура ближайшая к переданному timestamp'
+      params do
+        requires :timestamp, type: Integer, desc: 'Unix timestamp'
+      end
       get '/weather/by_time' do
-        if response_historical_weather.code == 200
-          timestamp = params[:timestamp]
-          historical_data = JSON.parse(response_historical_weather.body)
-          closest_temperature_data = historical_data.min_by { |hour_data| (hour_data['EpochTime'] - timestamp).abs }
-          closest_temperature = closest_temperature_data['Temperature']['Metric']['Value']
+        timestamp = params[:timestamp]
 
-          { closest_temperature: closest_temperature }
+        closest_weather_data = WeatherCondition.order('ABS(timestamp - ?)', timestamp).first
+
+        if closest_weather_data.present?
+          { temperature: closest_weather_data.temperature, timestamp: closest_weather_data.timestamp }
         else
           error_404
         end
