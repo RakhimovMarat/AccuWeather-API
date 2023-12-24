@@ -43,7 +43,7 @@ module Weather
       get :historical do
         if response_historical_weather.code == 200
           historical_data = JSON.parse(response_historical_weather.body).map do |hour_data|
-            {
+             {
               timestamp: hour_data['EpochTime'],
               temperature: hour_data['Temperature']['Metric']['Value']
             }
