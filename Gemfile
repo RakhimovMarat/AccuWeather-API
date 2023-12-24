@@ -17,6 +17,8 @@ gem "grape"
 gem "delayed_job_active_record"
 gem "rufus-scheduler"
 gem "httparty"
+gem "daemons"
+gem "pry"
 
 
 

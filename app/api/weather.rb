@@ -19,7 +19,8 @@ module Weather
 
     resource :weather do
 
-      accuweather_api_key = 'aPmXW3zSMgsz4K84mkY8fVRokC5xkAZY'
+      #accuweather_api_key = 'aPmXW3zSMgsz4K84mkY8fVRokC5xkAZY'
+      accuweather_api_key = '0PJDztP9Dy8StHh0HjGGsC3BMFNiBfbq'
       city_key = '295954'
       response_current_weather = HTTParty.get(
         "http://dataservice.accuweather.com/currentconditions/v1/#{city_key}?apikey=#{accuweather_api_key}&language=en"
