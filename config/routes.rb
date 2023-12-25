@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount Weather::Temperature => '/'
+  mount WeatherApi::Temperature => '/'
 end

@@ -1,7 +1,7 @@
 require 'grape'
 require 'httparty'
 
-module Weather
+module WeatherApi
   class Temperature < Grape::API
     version 'v1', using: :path
     format :json
@@ -19,8 +19,8 @@ module Weather
 
     resource :weather do
 
-      #accuweather_api_key = 'aPmXW3zSMgsz4K84mkY8fVRokC5xkAZY'
-      accuweather_api_key = '0PJDztP9Dy8StHh0HjGGsC3BMFNiBfbq'
+      accuweather_api_key = 'aPmXW3zSMgsz4K84mkY8fVRokC5xkAZY'
+      #accuweather_api_key = '0PJDztP9Dy8StHh0HjGGsC3BMFNiBfbq'
       city_key = '295954'
       response_current_weather = HTTParty.get(
         "http://dataservice.accuweather.com/currentconditions/v1/#{city_key}?apikey=#{accuweather_api_key}&language=en"
@@ -98,16 +98,17 @@ module Weather
       params do
         requires :timestamp, type: Integer, desc: 'Unix timestamp'
       end
-      get '/weather/by_time' do
-        timestamp = params[:timestamp]
+      get '/by_time' do
 
-        closest_weather_data = WeatherCondition.order('ABS(timestamp - ?)', timestamp).first
+      timestamp = Time.at(params[:timestamp]).utc
+      closest_weather_data = WeatherCondition.where('timestamp <= ?', timestamp).order(timestamp: :desc).first
 
-        if closest_weather_data.present?
-          { temperature: closest_weather_data.temperature, timestamp: closest_weather_data.timestamp }
-        else
-          error_404
-        end
+      if closest_weather_data
+        { timestamp: closest_weather_data.timestamp, temperature: closest_weather_data.temperature }
+      else
+        error_404
+      end
+
       end
     end
 
