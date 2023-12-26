@@ -19,6 +19,8 @@ gem "rufus-scheduler"
 gem "httparty"
 gem "daemons"
 gem "pry"
+gem "grape-swagger"
+gem "grape-swagger-rails"
 
 
 

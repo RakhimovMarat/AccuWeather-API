@@ -115,5 +115,6 @@ module WeatherApi
       { status: 'OK' }
     end
 
+    add_swagger_documentation
   end
 end
