@@ -99,16 +99,14 @@ module WeatherApi
         requires :timestamp, type: Integer, desc: 'Unix timestamp'
       end
       get '/by_time' do
+        timestamp = Time.at(params[:timestamp]).utc
+        closest_weather_data = WeatherCondition.where('timestamp <= ?', timestamp).order(timestamp: :desc).first
 
-      timestamp = Time.at(params[:timestamp]).utc
-      closest_weather_data = WeatherCondition.where('timestamp <= ?', timestamp).order(timestamp: :desc).first
-
-      if closest_weather_data
-        { timestamp: closest_weather_data.timestamp, temperature: closest_weather_data.temperature }
-      else
-        error_404
-      end
-
+        if closest_weather_data
+          { timestamp: closest_weather_data.timestamp, temperature: closest_weather_data.temperature }
+        else
+          error_404
+        end
       end
     end
 
